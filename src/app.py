@@ -5,20 +5,18 @@ file_name = "/workspace/src/2021-02-23-isle-of-wight.csv"
 
 def read_file(file_name = file_name):
     data = []
-    empty_dict = {'date_time': None, 'location': None, 'customer_name': None, 'products': None, 'payment_method': None, 'total': None, 'card_details': None}
     try:
-        with open(file_name, mode = 'r') as file:
-            # Opens the csv file of file_name
-            field_names = ['date_time', 'location', 'customer_name', 'products', 'payment_method', 'total', 'card_details']
-            reader = csv.DictReader(file, fieldnames = field_names)
+        with open(file_name,'r') as file:
+            reader = csv.DictReader(file)
             for line in reader:        
-                data.append(line)            
+                empty_dict = {'date_time': None, 'location': None, 'customer_name': None, 'products': None, 'payment_method': None, 'total': None, 'card_details': None}
+                for key, value in line.items():                    
+                        empty_dict[key] = value
+                data.append(empty_dict)  
     except Exception as e:
         print('An error occurred when attempting to read the csv file ' + str(e))
     
-    for item in data:
-        print(item) 
-    # return data
+    return data
 
 def append_data(csv_line):
     order = [] #Creates temporary list to be appended to data list
