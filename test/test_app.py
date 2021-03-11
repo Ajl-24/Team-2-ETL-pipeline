@@ -54,7 +54,7 @@ def test_remove_card_details():
     mock_transform.remove_card_details()
     
     actual = mock_transform.data
-    expected = {'date_time': '2021-02-23 17:58:17', 'location': 'Isle of Wight', 'products': 'Regular,Americano,1.95,,Flat white,2.15,,Flavoured iced latte - Caramel,2.75', 'payment_method': 'CASH', 'total': '6.85'}, {'date_time': '2021-02-23 17:59:04', 'location': 'Isle of Wight', 'products': ',Frappes - Coffee,2.75,,Speciality Tea - Darjeeling,1.3,,Smoothies - Berry Beautiful,2.0,Large,Latte,2.45', 'payment_method': 'CASH', 'total': '8.50'}
+    expected = {'date_time': '2021-02-23 17:58:17', 'location': 'Isle of Wight', 'customer_name': 'Ramon Salters', 'products': 'Regular,Americano,1.95,,Flat white,2.15,,Flavoured iced latte - Caramel,2.75', 'payment_method': 'CASH', 'total': '6.85'}, {'date_time': '2021-02-23 17:59:04', 'location': 'Isle of Wight', 'customer_name': 'Stanley Cordano', 'products': ',Frappes - Coffee,2.75,,Speciality Tea - Darjeeling,1.3,,Smoothies - Berry Beautiful,2.0,Large,Latte,2.45', 'payment_method': 'CASH', 'total': '8.50'}
     
     assert actual == expected
 
