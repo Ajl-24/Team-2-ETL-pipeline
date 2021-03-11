@@ -98,6 +98,10 @@ RUN apt-get install -y apt-utils groff
 RUN sudo apt-get update -y
 RUN sudo apt-get upgrade -y
 RUN sudo apt-get install python3-venv -y
+    # Install pip for python3 not pip for python2 V2
+RUN sudo apt-get install python3-pip -y
+    # Install psycopg2 for the postgresql database
+RUN pip3 install psycopg2-binary
     #
     # Clean up
     #
