@@ -1,5 +1,5 @@
 import csv 
-import transform as tf
+import src.transform as transform
 
 file_name = "/workspace/src/2021-02-23-isle-of-wight.csv"
 
@@ -24,11 +24,12 @@ def append_to_list(reader,cached_list):
 
 csv_data = read_file()
 
-iow_data = tf.Transform(csv_data)
+iow_data = transform.Transform(csv_data)
 
-# print("Is it working?")
-# print(iow_data.data[0])
-# iow_data.remove_names()
-# print(iow_data.data[0])
-# iow_data.remove_card_details()
-# print(iow_data.data[0])
+if __name__ == '__main__':
+
+    iow_data.remove_names()    
+    iow_data.remove_payment_details()    
+    iow_data.add_id()
+    iow_data.split_products()    
+    iow_data.sort_by_id()
