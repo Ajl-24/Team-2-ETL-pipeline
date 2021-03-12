@@ -2,26 +2,9 @@ import os
 import psycopg2
 # from dotenv import load_dotenv ?
 
-database = 'cafe_db'
-user = 'root'
-password = 'password'
-host = '172.21.0.3'
-port = '5432'
-
-def create_cafe_db():
-    try:
-        connection = psycopg2.connect(database, user, password, host, port)
-        with connection.cursor() as cursor:
-            postgresql = 'CREATE DATABASE IF NOT EXISTS cafe_db'
-            cursor.execute(postgresql)
-            connection.commit()
-        connection.close()
-    except Exception as e:
-        print("An error occurred when attempting to create the 'cafe_db' database: " + str(e))
-
 def create_orders_table_in_cafe_db():
     try:
-        connection = psycopg2.connect(database, user, password, host, port)
+        connection = psycopg2.connect(database='cafe_db', user='root', password='password', host='172.21.0.3', port='5432')
         with connection.cursor() as cursor:
             postgresql = """
             CREATE TABLE IF NOT EXISTS orders (
@@ -40,7 +23,7 @@ def create_orders_table_in_cafe_db():
 
 def create_products_table_in_cafe_db():
     try:
-        connection = psycopg2.connect(database, user, password, host, port)
+        connection = psycopg2.connect(database='cafe_db', user='root', password='password', host='172.21.0.3', port='5432')
         with connection.cursor() as cursor:
             postgresql = """
             CREATE TABLE IF NOT EXISTS products (
@@ -57,7 +40,7 @@ def create_products_table_in_cafe_db():
 
 def create_dates_table_in_cafe_db():
     try:
-        connection = psycopg2.connect(database, user, password, host, port)
+        connection = psycopg2.connect(database='cafe_db', user='root', password='password', host='172.21.0.3', port='5432')
         with connection.cursor() as cursor:
             postgresql = """
             CREATE TABLE IF NOT EXISTS dates (
@@ -73,7 +56,7 @@ def create_dates_table_in_cafe_db():
 
 def create_cafe_locations_table_in_cafe_db():
     try:
-        connection = psycopg2.connect(database, user, password, host, port)
+        connection = psycopg2.connect(database='cafe_db', user='root', password='password', host='172.21.0.3', port='5432')
         with connection.cursor() as cursor:
             postgresql = """
             CREATE TABLE IF NOT EXISTS cafe_locations (
@@ -89,7 +72,7 @@ def create_cafe_locations_table_in_cafe_db():
 
 def create_payments_table_in_cafe_db(): # ???
     try:
-        connection = psycopg2.connect(database, user, password, host, port)
+        connection = psycopg2.connect(database='cafe_db', user='root', password='password', host='172.21.0.3', port='5432')
         with connection.cursor() as cursor:
             postgresql = """
             CREATE TABLE IF NOT EXISTS payments (
@@ -105,12 +88,12 @@ def create_payments_table_in_cafe_db(): # ???
 
 def create_products_in_orders_table_in_cafe_db():
     try:
-        connection = psycopg2.connect(database, user, password, host, port)
+        connection = psycopg2.connect(database='cafe_db', user='root', password='password', host='172.21.0.3', port='5432')
         with connection.cursor() as cursor:
             postgresql = """
             CREATE TABLE IF NOT EXISTS products_in_orders (
             order_id INT NOT NULL,
-            product_id INT NOT NULL,
+            product_id INT NOT NULL
             )
             """
             cursor.execute(postgresql)
@@ -121,7 +104,7 @@ def create_products_in_orders_table_in_cafe_db():
 
 def create_order_totals_table_in_cafe_db(): # name order_price_totals?
     try:
-        connection = psycopg2.connect(database, user, password, host, port)
+        connection = psycopg2.connect(database='cafe_db', user='root', password='password', host='172.21.0.3', port='5432')
         with connection.cursor() as cursor:
             postgresql = """
             CREATE TABLE IF NOT EXISTS order_totals (
@@ -136,7 +119,6 @@ def create_order_totals_table_in_cafe_db(): # name order_price_totals?
         print("An error occurred when attempting to create the order_totals table: " + str(e))
 
 
-create_cafe_db()
 create_orders_table_in_cafe_db()
 create_products_table_in_cafe_db()
 create_dates_table_in_cafe_db()
@@ -145,4 +127,4 @@ create_payments_table_in_cafe_db()
 create_products_in_orders_table_in_cafe_db()
 create_order_totals_table_in_cafe_db()
 
-# cached_list = []
+# FOREIGN KEYS? Create clean data table to add FK?
