@@ -38,6 +38,7 @@ def create_orders_table_in_cafe_db():
             postgresql = """ CREATE TABLE IF NOT EXISTS orders (
                             order_id SERIAL PRIMARY KEY NOT NULL,
                             date DATE NOT NULL,
+                            time TIME NOT NULL,
                             location_id INT NOT NULL REFERENCES cafe_locations,
                             total_price DECIMAL(6,2) NOT NULL
                             ) """
