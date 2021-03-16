@@ -1,16 +1,33 @@
 import os
 import psycopg2
-# from dotenv import load_dotenv ?
+from dotenv import load_dotenv
+
+load_dotenv()
+database = os.environ.get("postgresql_db")
+user = os.environ.get("postgresql_user")
+password = os.environ.get("postgresql_pass")
+host = os.environ.get("postgresql_host")
+port = os.environ.get("postgresql_port")
+
+def open_connection(database=database, user=user, password=password, host=host, port=port):
+    conn = psycopg2.connect(
+        database = database,
+        user = user,
+        password = password,
+        host = host,
+        port = port
+        )
+    return conn
 
 def create_products_table_in_cafe_db():
     try:
-        connection = psycopg2.connect(database='cafe_db', user='root', password='password', host='172.21.0.3', port='5432')
+        connection = open_connection()
         with connection.cursor() as cursor:
-            postgresql = """ CREATE TABLE IF NOT EXISTS products (
+            postgresql = """CREATE TABLE IF NOT EXISTS products (
                             product_id SERIAL PRIMARY KEY NOT NULL,
                             product_name VARCHAR(100) NOT NULL,
                             product_price DECIMAL(6,2) NOT NULL
-                            ) """
+                            )"""
             cursor.execute(postgresql)
             connection.commit()
         connection.close()
@@ -19,12 +36,12 @@ def create_products_table_in_cafe_db():
 
 def create_cafe_locations_table_in_cafe_db():
     try:
-        connection = psycopg2.connect(database='cafe_db', user='root', password='password', host='172.21.0.3', port='5432')
+        connection = open_connection()
         with connection.cursor() as cursor:
-            postgresql = """ CREATE TABLE IF NOT EXISTS cafe_locations (
+            postgresql = """CREATE TABLE IF NOT EXISTS cafe_locations (
                             location_id SERIAL PRIMARY KEY NOT NULL,
                             location VARCHAR(100) NOT NULL
-                            ) """
+                            )"""
             cursor.execute(postgresql)
             connection.commit()
         connection.close()
@@ -33,15 +50,15 @@ def create_cafe_locations_table_in_cafe_db():
 
 def create_orders_table_in_cafe_db():
     try:
-        connection = psycopg2.connect(database='cafe_db', user='root', password='password', host='172.21.0.3', port='5432')
+        connection = open_connection()
         with connection.cursor() as cursor:
-            postgresql = """ CREATE TABLE IF NOT EXISTS orders (
+            postgresql = """CREATE TABLE IF NOT EXISTS orders (
                             order_id SERIAL PRIMARY KEY NOT NULL,
                             date DATE NOT NULL,
                             time TIME NOT NULL,
                             location_id INT NOT NULL REFERENCES cafe_locations,
                             order_price DECIMAL(6,2) NOT NULL
-                            ) """
+                            )"""
             cursor.execute(postgresql)
             connection.commit()
         connection.close()
@@ -50,12 +67,12 @@ def create_orders_table_in_cafe_db():
 
 def create_products_in_orders_table_in_cafe_db():
     try:
-        connection = psycopg2.connect(database='cafe_db', user='root', password='password', host='172.21.0.3', port='5432')
+        connection = open_connection()
         with connection.cursor() as cursor:
-            postgresql = """ CREATE TABLE IF NOT EXISTS products_in_orders (
+            postgresql = """CREATE TABLE IF NOT EXISTS products_in_orders (
                             order_id INT NOT NULL REFERENCES orders,
                             product_id INT NOT NULL REFERENCES products
-                            ) """
+                            )"""
             cursor.execute(postgresql)
             connection.commit()
         connection.close()

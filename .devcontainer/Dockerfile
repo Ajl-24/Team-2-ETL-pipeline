@@ -102,6 +102,10 @@ RUN sudo apt-get install python3-venv -y
 RUN sudo apt-get install python3-pip -y
     # Install psycopg2 for the postgresql database
 RUN pip3 install psycopg2-binary
+    # Install python-dotenv
+RUN pip3 install python-dotenv
+    # Install pytest
+RUN pip3 install pytest
     #
     # Clean up
     #
