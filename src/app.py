@@ -31,5 +31,7 @@ if __name__ == '__main__':
     iow_data.remove_names()    
     iow_data.remove_payment_details()    
     iow_data.add_id()
-    iow_data.split_products()    
+    iow_data.split_products()   
+    iow_data.split_product_price()
+    iow_data.split_date_time()
     iow_data.sort_by_id()

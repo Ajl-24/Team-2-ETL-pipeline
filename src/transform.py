@@ -30,15 +30,13 @@ class Transform:
             temp_product = list_products[index:(index + 3)] # Asigns relevant information of single product to list 
             string_product = ",".join(temp_product) # Casts list to a string to maintian format 
             temp_dict['products'] = string_product # Overwrites value held at 'products' key into copy of order dictionary
-            self.data.append(temp_dict) # Inserts into the same index of the original dictionary in the list
-            
+            self.data.append(temp_dict) # Inserts into the same index of the original dictionary in the list   
 
     def split_products(self):
         data_copy = self.data.copy()
         self.data = []
         
-        for index in range(len(data_copy)): 
-            print(len(data_copy))                       
+        for index in range(len(data_copy)):                      
             product_list = data_copy[index]['products'].split(',')
             if len(product_list) > 3:                
                 order_to_split = data_copy[index]
@@ -46,5 +44,21 @@ class Transform:
             else:
                 self.data.append(data_copy[index])
                 
+    def split_product_price(self):
+        for order_dict in self.data:
+            product_string =  order_dict['products']
+            product_details = product_string.split(',')
+            order_dict['product_price'] = product_details[-1]
+            if product_details[0] == "":
+                order_dict['product'] = product_details[1]
+                del order_dict['products']
+            else:
+                order_dict['product'] = product_details [0] + ' ' + product_details[1]
+                del order_dict['products']
                 
-            
+    def split_date_time(self):
+        for order_dict in self.data:
+            order_date_time = order_dict['date_time'].split(' ')
+            del order_dict['date_time']
+            order_dict['date'] = order_date_time[0]
+            order_dict['time'] = order_date_time[1]
