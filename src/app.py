@@ -1,11 +1,11 @@
 import csv 
 import src.transform as transform
+import src.db as db
 
 file_name = "/workspace/src/2021-02-23-isle-of-wight.csv"
 
 def read_file(file_name = file_name):
     data = []
-    #empty_dict = {'date_time': None, 'location': None, 'customer_name': None, 'products': None, 'payment_method': None, 'total': None, 'card_details': None}
     try:
         with open(file_name, mode = 'r') as file:
             # Opens the csv file of file_name
@@ -28,10 +28,24 @@ iow_data = transform.Transform(csv_data)
 
 if __name__ == '__main__':
 
-    iow_data.remove_names()    
-    iow_data.remove_payment_details()    
+    db.create_products_table_in_cafe_db()
+    db.create_cafe_locations_table_in_cafe_db()
+    db.create_orders_table_in_cafe_db()
+    db.create_products_in_orders_table_in_cafe_db()
+    
+    iow_data.remove_names()
+    iow_data.remove_payment_details()
+    iow_data.split_date_time()
+
+    iow_order_data = iow_data.data.copy()
+
+    db.load_into_cafe_locations_table(iow_order_data[0]['location'])
+    db.load_into_orders_table(iow_order_data)
+    
     iow_data.add_id()
     iow_data.split_products()   
     iow_data.split_product_price()
-    iow_data.split_date_time()
     iow_data.sort_by_id()
+
+    db.load_into_products_table(iow_data.data)
+    # db.load_into_orders_in_products_table()
