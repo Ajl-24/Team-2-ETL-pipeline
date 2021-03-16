@@ -77,9 +77,6 @@ def test_split_products():
                 {'id': 1, 'products': 'Large,Latte,2.45', 'total': '8.50'}
                 ]
     
-    # print(actual)
-    # print(expected)
-    
     assert actual == expected
 
 test_split_products()
