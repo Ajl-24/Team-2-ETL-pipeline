@@ -61,25 +61,25 @@ test_remove_payment_details()
 
 def test_split_products():
     def mock_data():
-        return [{'date_time': '2021-02-23 17:58:17', 'products': 'Regular,Americano,1.95,,Flat white,2.15,,Flavoured iced latte - Caramel,2.75', 'total': '6.85', 'card_details': 'None', 'id': 0}, {'date_time': '2021-02-23 17:59:04', 'products': ',Frappes - Coffee,2.75,,Speciality Tea - Darjeeling,1.3,,Smoothies - Berry Beautiful,2.0,Large,Latte,2.45', 'total': '8.50', 'id': 1}]
+        return [{'id': 0, 'products': 'Regular,Americano,1.95,,Flat white,2.15,,Flavoured iced latte - Caramel,2.75', 'total': '6.85'}, {'id': 1, 'products': ',Frappes - Coffee,2.75,,Speciality Tea - Darjeeling,1.3,,Smoothies - Berry Beautiful,2.0,Large,Latte,2.45', 'total': '8.50'}]
 
     mock_transform = transform.Transform(mock_data())
     
     mock_transform.split_products()
     
     actual = mock_transform.data
-    expected = [{'date_time': '2021-02-23 17:58:17', 'products': 'Regular,Americano,1.95,', 'total': '6.85', 'id': 0 },
-                {'date_time': '2021-02-23 17:58:17', 'products': 'Flat white,2.15', 'total': '6.85', 'id': 0},
-                {'date_time': '2021-02-23 17:58:17', 'products': ',Flavoured iced latte - Caramel,2.75', 'total': '6.85', 'id': 0}, 
-                {'date_time': '2021-02-23 17:59:04', 'products': ',Frappes - Coffee,2.75', 'total': '8.50', 'id': 1},
-                {'date_time': '2021-02-23 17:59:04', 'products': ',Speciality Tea - Darjeeling,1.3', 'total': '8.50', 'id': 1}, 
-                {'date_time': '2021-02-23 17:59:04', 'products': ',Smoothies - Berry Beautiful,2.0', 'total': '8.50', 'id': 1}, 
-                {'date_time': '2021-02-23 17:59:04', 'products': ',Large,Latte,2.45', 'total': '8.50', 'id': 1}, 
+    expected = [{'id': 0, 'products': 'Regular,Americano,1.95', 'total': '6.85'},
+                {'id': 0, 'products': ',Flat white,2.15', 'total': '6.85'},
+                {'id': 0, 'products': ',Flavoured iced latte - Caramel,2.75', 'total': '6.85'},
+                {'id': 1, 'products': ',Frappes - Coffee,2.75', 'total': '8.50'},
+                {'id': 1, 'products': ',Speciality Tea - Darjeeling,1.3', 'total': '8.50'},
+                {'id': 1, 'products': ',Smoothies - Berry Beautiful,2.0', 'total': '8.50'},
+                {'id': 1, 'products': 'Large,Latte,2.45', 'total': '8.50'}
                 ]
     
-    print(actual)
-    print(expected)
+    # print(actual)
+    # print(expected)
     
-    #assert actual == expected
+    assert actual == expected
 
 test_split_products()
