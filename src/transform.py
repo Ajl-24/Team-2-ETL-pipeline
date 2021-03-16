@@ -3,6 +3,7 @@ class Transform:
     def __init__(self, data):
         self.raw_data = data
         self.data = data
+        self.split_data = []
         
     def remove_names(self):        
         for order_dict in self.data:
@@ -29,11 +30,21 @@ class Transform:
             temp_product = list_products[index:(index + 3)] # Asigns relevant information of single product to list 
             string_product = ",".join(temp_product) # Casts list to a string to maintian format 
             temp_dict['products'] = string_product # Overwrites value held at 'products' key into copy of order dictionary
-            self.data.append(temp_dict) # Append dictionary
+            self.data.append(temp_dict) # Inserts into the same index of the original dictionary in the list
+            
 
     def split_products(self):
-        for index, order_dict in enumerate(self.data):
-            if order_dict['products'].count(',') > 2:                
-                order_to_split = self.data.pop(index)
+        data_copy = self.data.copy()
+        self.data = []
+        
+        for index in range(len(data_copy)): 
+            print(len(data_copy))                       
+            product_list = data_copy[index]['products'].split(',')
+            if len(product_list) > 3:                
+                order_to_split = data_copy[index]
                 thing = self.seperate_string(order_to_split)
-                                
+            else:
+                self.data.append(data_copy[index])
+                
+                
+            
