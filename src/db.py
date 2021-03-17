@@ -98,23 +98,42 @@ def fetch_location_data():
 
     return new_list
 
-def fetch_product_data():                   ######   MORNING VIBE   #####
+def fetch_product_data():
+    new_list = []
+    try:
+        connection = open_connection()
+        with connection.cursor() as cursor:
+            postgresql = "SELECT * from products"
+            cursor.execute(postgresql)
+            rows = cursor.fetchall()
+            for row in rows:
+                new_dict = {'product_id': int, 'product': str}
+                new_dict['product_id'] = row[0]
+                new_dict['product'] = row[1]
+                new_list.append(new_dict)
+            cursor.close()
+    except Exception as e:
+        print("An error occurred when attempting to fetch data from the products table: " + str(e))
+
+    return new_list
+
+def fetch_order_data():           ### SEE trello board - update local order IDs to match order_ids in postgreSQL
     pass
     # new_list = []
     # try:
     #     connection = open_connection()
     #     with connection.cursor() as cursor:
-    #         postgresql = "SELECT * from products"
+    #         postgresql = "SELECT * from orders"
     #         cursor.execute(postgresql)
     #         rows = cursor.fetchall()
     #         for row in rows:
-    #             new_dict = {'product_id': int, 'product': str}
-    #             new_dict['product_id'] = row[0]
-    #             new_dict['product'] = row[1]
+    #             new_dict = {'order_id': int, 'order': str}
+    #             new_dict['order_id'] = row[0]
+    #             new_dict['order'] = row[1]
     #             new_list.append(new_dict)
     #         cursor.close()
     # except Exception as e:
-    #     print("An error occurred when attempting to fetch data from the products table: " + str(e))
+    #     print("An error occurred when attempting to fetch data from the orders table: " + str(e))
 
     # return new_list
 
@@ -128,12 +147,12 @@ def load_into_cafe_locations_table(location):
     except Exception as e:
         print("An error occurred when attempting to load data into the cafe_locations table: " + str(e))
 
-def load_into_orders_table(iow_order_data):
+def load_into_orders_table(data_list):
     new_list = fetch_location_data()
     try:
         connection = open_connection()
         with connection.cursor() as cursor:
-            for dictionary in iow_order_data:
+            for dictionary in data_list:
                 for new_dict in new_list:
                     if dictionary['location'] == new_dict['location']:
                         postgresql = "INSERT INTO orders (date, time, location_id, order_price) VALUES ('{}', '{}', '{}', '{}')".format(dictionary['date'], dictionary['time'], new_dict['location_id'], dictionary['total'])
@@ -143,8 +162,8 @@ def load_into_orders_table(iow_order_data):
     except Exception as e:
         print("An error occurred when attempting to load data into the orders table: " + str(e))
 
-def load_into_products_table(iow_order_data):
-    unique_product_list = sorted(list(set((order_dict['product'], order_dict['product_price']) for order_dict in iow_order_data)))
+def load_into_products_table(data_list):
+    unique_product_list = sorted(list(set((order_dict['product'], order_dict['product_price']) for order_dict in data_list)))
     try:
         connection = open_connection()
         with connection.cursor() as cursor:
@@ -155,5 +174,17 @@ def load_into_products_table(iow_order_data):
     except Exception as e:
         print("An error occurred when attempting to load data into the products table: " + str(e))
 
-def load_into_orders_in_products_table(iow_order_data):
-    unique_product_list = sorted(list(set((order_dict['product'], order_dict['product_price']) for order_dict in iow_order_data)))
+def load_into_products_in_orders_table(data_list):      ### REVIEW dictionary['id] + 1
+    new_list = fetch_product_data()
+    try:
+        connection = open_connection()
+        with connection.cursor() as cursor:
+            for dictionary in data_list:
+                for new_dict in new_list:
+                    if dictionary['product'] == new_dict['product']:
+                        postgresql = "INSERT INTO products_in_orders (order_id, product_id) VALUES ('{}', '{}')".format((dictionary['id'] + 1), new_dict['product_id'])
+                        cursor.execute(postgresql)
+                        connection.commit()
+        connection.close()
+    except Exception as e:
+        print("An error occurred when attempting to load data into the products_in_orders table: " + str(e))
