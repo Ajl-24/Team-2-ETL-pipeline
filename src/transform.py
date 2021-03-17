@@ -48,12 +48,12 @@ class Transform:
         for order_dict in self.data:
             product_string =  order_dict['products']
             product_details = product_string.split(',')
-            order_dict['product_price'] = product_details[-1]
+            order_dict['product_price'] = product_details[-1].title()
             if product_details[0] == "":
-                order_dict['product'] = product_details[1]
+                order_dict['product'] = product_details[1].title()
                 del order_dict['products']
             else:
-                order_dict['product'] = product_details [0] + ' ' + product_details[1]
+                order_dict['product'] = product_details[1].title() + ' ' + product_details[0].title()
                 del order_dict['products']
                 
     def split_date_time(self):
