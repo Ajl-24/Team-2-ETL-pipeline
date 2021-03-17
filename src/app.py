@@ -39,13 +39,13 @@ if __name__ == '__main__':
 
     iow_order_data = iow_data.data.copy()
 
-    db.load_into_cafe_locations_table(iow_order_data[0]['location'])
-    db.load_into_orders_table(iow_order_data)
+    # db.load_into_cafe_locations_table(iow_order_data[0]['location'])
+    # db.load_into_orders_table(iow_order_data)
     
     iow_data.add_id()
     iow_data.split_products()   
     iow_data.split_product_price()
     iow_data.sort_by_id()
 
-    db.load_into_products_table(iow_data.data)
-    # db.load_into_orders_in_products_table()
+    # db.load_into_products_table(iow_data.data)
+    # db.load_into_products_in_orders_table(iow_data.data)
