@@ -136,7 +136,6 @@ def load_into_orders_table_and_update_local_ids(data_list):
         with connection.cursor() as cursor:
             for dictionary in data_list:
                 for temp_dict in temp_list:
-                    # if dictionary['location'] == temp_dict['location']:
                     postgresql_1 = "INSERT INTO orders (date, time, location_id, order_price) VALUES ('{}', '{}', '{}', '{}')".format(dictionary['date'], dictionary['time'], temp_dict[dictionary['location']], dictionary['total'])
                     cursor.execute(postgresql_1)
                     connection.commit()
