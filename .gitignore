@@ -1,6 +1,7 @@
 #IDE settings
 .vscode/
 node_modules/
+.serverless
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

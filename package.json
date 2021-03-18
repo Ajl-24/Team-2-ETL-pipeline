@@ -21,6 +21,7 @@
   "homepage": "https://github.com/generation-DELON02/team-2-project#readme",
   "dependencies": {
     "aws-sso-credentials-getter": "^1.2.2",
-    "serverless": "^2.30.1"
-  }
+    "serverless": "^2.30.3"
+  },
+  "devDependencies": {}
 }
