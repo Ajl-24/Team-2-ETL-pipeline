@@ -36,16 +36,14 @@ if __name__ == '__main__':
     iow_data.remove_names()
     iow_data.remove_payment_details()
     iow_data.split_date_time()
-
-    iow_order_data = iow_data.data.copy()
-
-    # db.load_into_cafe_locations_table(iow_order_data[0]['location'])
-    # db.load_into_orders_table(iow_order_data)
-    
     iow_data.add_id()
+    
+    db.load_into_cafe_locations_table(iow_data.data)
+    db.load_into_orders_table_and_update_local_ids(iow_data.data)
+    
     iow_data.split_products()   
     iow_data.split_product_price()
     iow_data.sort_by_id()
-
-    # db.load_into_products_table(iow_data.data)
-    # db.load_into_products_in_orders_table(iow_data.data)
+    
+    db.load_into_products_table(iow_data.data)
+    db.load_into_products_in_orders_table(iow_data.data)
