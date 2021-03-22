@@ -26,24 +26,25 @@ csv_data = read_file()
 
 iow_data = transform.Transform(csv_data)
 
-if __name__ == '__main__':
-
-    db.create_products_table_in_cafe_db()
-    db.create_cafe_locations_table_in_cafe_db()
-    db.create_orders_table_in_cafe_db()
-    db.create_products_in_orders_table_in_cafe_db()
+def start_transformation():
+    if __name__ == '__main__':
     
-    iow_data.remove_names()
-    iow_data.remove_payment_details()
-    iow_data.split_date_time()
-    iow_data.add_id()
-    
-    db.load_into_cafe_locations_table(iow_data.data)
-    db.load_into_orders_table_and_update_local_ids(iow_data.data)
-    
-    iow_data.split_products()   
-    iow_data.split_product_price()
-    iow_data.sort_by_id()
-    
-    db.load_into_products_table(iow_data.data)
-    db.load_into_products_in_orders_table(iow_data.data)
+        db.create_products_table_in_cafe_db()
+        db.create_cafe_locations_table_in_cafe_db()
+        db.create_orders_table_in_cafe_db()
+        db.create_products_in_orders_table_in_cafe_db()
+        
+        iow_data.remove_names()
+        iow_data.remove_payment_details()
+        iow_data.split_date_time()
+        iow_data.add_id()
+        
+        db.load_into_cafe_locations_table(iow_data.data)
+        db.load_into_orders_table_and_update_local_ids(iow_data.data)
+        
+        iow_data.split_products()   
+        iow_data.split_product_price()
+        iow_data.sort_by_id()
+        
+        db.load_into_products_table(iow_data.data)
+        db.load_into_products_in_orders_table(iow_data.data)
