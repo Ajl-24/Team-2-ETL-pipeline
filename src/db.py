@@ -80,7 +80,7 @@ def create_products_in_orders_table_in_cafe_db():
         print("An error occurred when attempting to create the products_in_orders table: " + str(e))
        
 def fetch_location_data():
-    temp_list = []
+    temp_dict = {}
     try:
         connection = open_connection()
         with connection.cursor() as cursor:
@@ -88,16 +88,15 @@ def fetch_location_data():
             cursor.execute(postgresql)
             rows = cursor.fetchall()
             for row in rows:
-                temp_dict = {str(row[1]) : int(row[0])}
-                temp_list.append(temp_dict)
+                temp_dict[str(row[1])] = int(row[0])
             cursor.close()
     except Exception as e:
         print("An error occurred when attempting to fetch data from the cafe_locations table: " + str(e))
 
-    return temp_list
+    return temp_dict
 
 def fetch_product_data():
-    temp_list = []
+    temp_dict = {}
     try:
         connection = open_connection()
         with connection.cursor() as cursor:
@@ -105,24 +104,21 @@ def fetch_product_data():
             cursor.execute(postgresql)
             rows = cursor.fetchall()
             for row in rows:
-                temp_dict = {'product_id': int, 'product': str}
-                temp_dict['product_id'] = row[0]
-                temp_dict['product'] = row[1]
-                temp_list.append(temp_dict)
+               temp_dict[str(row[1])] = int(row[0])
             cursor.close()
     except Exception as e:
         print("An error occurred when attempting to fetch data from the products table: " + str(e))
 
-    return temp_list
+    return temp_dict
 
 def load_into_cafe_locations_table(data_list):
     unique_location_list = list(set((order_dict['location']) for order_dict in data_list))
-    sql_location_list = fetch_location_data()
+    sql_location_dict = fetch_location_data()
     try:
         connection = open_connection()
         with connection.cursor() as cursor:
             for location in unique_location_list:
-                if not any(location == sql_location.key() for sql_location in sql_location_list):
+                if location not in sql_location_dict:
                     cursor.execute("INSERT INTO cafe_locations (location) VALUES ('{}')".format(location))
                     connection.commit()
         connection.close()
@@ -130,32 +126,31 @@ def load_into_cafe_locations_table(data_list):
         print("An error occurred when attempting to load data into the cafe_locations table: " + str(e))
 
 def load_into_orders_table_and_update_local_ids(data_list):
-    temp_list = fetch_location_data()
+    sql_location_dict = fetch_location_data()
     try:
         connection = open_connection()
         with connection.cursor() as cursor:
             for dictionary in data_list:
-                for temp_dict in temp_list:
-                    postgresql_1 = "INSERT INTO orders (date, time, location_id, order_price) VALUES ('{}', '{}', '{}', '{}')".format(dictionary['date'], dictionary['time'], temp_dict[dictionary['location']], dictionary['total'])
-                    cursor.execute(postgresql_1)
-                    connection.commit()
-                    
-                    postgresql_2 = "SELECT order_id from orders WHERE order_id = (SELECT max(order_id) FROM orders)"
-                    cursor.execute(postgresql_2)
-                    row = cursor.fetchone()
-                    dictionary['id'] = row[0]
+                postgresql_1 = "INSERT INTO orders (date, time, location_id, order_price) VALUES ('{}', '{}', '{}', '{}')".format(dictionary['date'], dictionary['time'], sql_location_dict[dictionary['location']], dictionary['total'])
+                cursor.execute(postgresql_1)
+                connection.commit()
+                
+                postgresql_2 = "SELECT order_id from orders WHERE order_id = (SELECT max(order_id) FROM orders)"
+                cursor.execute(postgresql_2)
+                row = cursor.fetchone()
+                dictionary['id'] = row[0]
         connection.close()
     except Exception as e:
         print("An error occurred when attempting to load data into the orders table: " + str(e))
 
 def load_into_products_table(data_list):
     unique_product_list = sorted(list(set((order_dict['product'], order_dict['product_price']) for order_dict in data_list)))
-    sql_product_list = fetch_product_data()
+    sql_product_dict = fetch_product_data()
     try:
         connection = open_connection()
         with connection.cursor() as cursor:
             for product in unique_product_list:
-                if product not in sql_product_list:
+                if product[0] not in sql_product_dict:
                     cursor.execute("INSERT INTO products (product_name, product_price) VALUES ('{}', '{}')".format(product[0], product[1]))
                     connection.commit()
         connection.close()
@@ -163,16 +158,14 @@ def load_into_products_table(data_list):
         print("An error occurred when attempting to load data into the products table: " + str(e))
 
 def load_into_products_in_orders_table(data_list):
-    temp_list = fetch_product_data()
+    sql_product_dict = fetch_product_data()
     try:
         connection = open_connection()
         with connection.cursor() as cursor:
             for dictionary in data_list:
-                for temp_dict in temp_list:
-                    if dictionary['product'] == temp_dict['product']:
-                        postgresql = "INSERT INTO products_in_orders (order_id, product_id) VALUES ('{}', '{}')".format((dictionary['id']), temp_dict['product_id'])
-                        cursor.execute(postgresql)
-                        connection.commit()
+                postgresql = "INSERT INTO products_in_orders (order_id, product_id) VALUES ('{}', '{}')".format((dictionary['id']), sql_product_dict[dictionary['product']])
+                cursor.execute(postgresql)
+                connection.commit()
         connection.close()
     except Exception as e:
         print("An error occurred when attempting to load data into the products_in_orders table: " + str(e))
