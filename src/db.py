@@ -63,7 +63,7 @@ def create_orders_table_in_cafe_db():
             connection.commit()
         connection.close()
     except Exception as e:
-      print("An error occurred when attempting to create the orders table: " + str(e))
+        print("An error occurred when attempting to create the orders table: " + str(e))
 
 def create_products_in_orders_table_in_cafe_db():
     try:
@@ -78,7 +78,7 @@ def create_products_in_orders_table_in_cafe_db():
         connection.close()
     except Exception as e:
         print("An error occurred when attempting to create the products_in_orders table: " + str(e))
-       
+
 def fetch_location_data():
     temp_dict = {}
     try:
@@ -104,7 +104,7 @@ def fetch_product_data():
             cursor.execute(postgresql)
             rows = cursor.fetchall()
             for row in rows:
-               temp_dict[str(row[1])] = int(row[0])
+                temp_dict[str(row[1])] = int(row[0])
             cursor.close()
     except Exception as e:
         print("An error occurred when attempting to fetch data from the products table: " + str(e))
