@@ -106,6 +106,12 @@ RUN pip3 install psycopg2-binary
 RUN pip3 install python-dotenv
     # Install pytest
 RUN pip3 install pytest
+
+RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
+RUN sudo apt-get install -y nodejs
+RUN npm install
+RUN npm install plugins serverless-python-requirements
+RUN npm install plugins serverless-iam-roles-per-function
     #
     # Clean up
     #
