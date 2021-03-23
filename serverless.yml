@@ -12,6 +12,18 @@
 # Happy Coding!
 # npm install plugins - may need to install plugins
 
+
+plugins:
+  - serverless-python-requirements
+  - serverless-iam-roles-per-function
+
+custom:
+  pythonRequirements:
+    slim: true
+    layer: true
+    dockerizePip: non-linux
+
+
 service: team2-etl
 frameworkVersion: '2'
 provider:
@@ -24,7 +36,8 @@ provider:
     role: arn:aws:iam::505617246107:role/team-2-execution-role
 package:
   individually: false
-  include: 
+  include:
+    - requirements.txt 
     - src/**
   exclude:
     - "*"
@@ -32,111 +45,20 @@ package:
 
 functions:
   team2-etl:
-    handler: src/team2-etl/example2.handle
+    handler: src/team2-etl/handler.handle
     timeout: 300
+    layers:
+      - !Ref PythonRequirementsLambdaLayer
     events:
       - s3:
-          bucket: team2testbucket3
+          bucket: team2testbucket
           event: s3:ObjectCreated:*
           rules:
             - suffix: .csv
-  example-2-etl:
-    handler: src/exmaple-2-etl/handler.hello
+
+  hello2-etl:
+    handler: src/hello2-etl/hello.hello
     timeout: 300
-
-
-# plugins:
-#   - serverless-python-requirements
-#   - serverless-iam-roles-per-function
-
-# custom:
-#   pythonRequirements:
-#     slim: true
-#     layer: true
-
-# service: team2-etl
-# frameworkVersion: '2'
-# provider:
-#   name: aws
-#   stage: dev
-#   region: eu-west-1
-#   runtime: python3.7
-#   lambdaHashingVersion: 20201221
-#   iam:
-#     role: arn:aws:iam::505617246107:role/team-2-execution-role
-# package:
-#   individually: false
-#   include: 
-#     - src/**
-#   exclude:
-#     - "*"
-#     - "*/**"
-
-# functions:
-#   team2-etl:
-#     handler: src/team2-etl/example2.handle
-#     timeout: 300
-#     layers:
-#       - !Ref PythonRequirementsLambdaLayer
-#     events:
-#       - s3:
-#           bucket: team2testbucket
-#           event: s3:ObjectCreated:*
-#           existing: true
-#           rules:
-#             - suffix: .csv
-#     iamRoleStatements:
-#       - Effect: 'Allow'
-#         Action:
-#           - s3:GetObject
-#           - s3:ListBucket
-#         Resource:
-#           - arn:aws:s3:::my-bucket
-#           - arn:aws:s3:::my-bucket/*
-
-#   example-2-etl:
-#     handler: src/exmaple-2-etl/handler.hello
-#     timeout: 300
-#     layers:
-#       - !Ref PythonRequirementsLambdaLayer
-    
-  
-# resources:
-#   Resources:
-#     exampleBucket:
-#       Type: 'AWS::S3::Bucket'
-#       DeletionPolicy: Retain
-#       Properties:
-#         BucketName: team2testbucket
-
-# service: team2-etl
-# frameworkVersion: '2'
-# provider:
-#   name: aws
-#   runtime: python3.8
-#   lambdaHashingVersion: 20201221
-#   stage: dev
-#   region: eu-west-1
-#   iam:
-#     role: arn:aws:iam::064061412720:role/team-2-execution-role
-# package:
-#   individually: false
-#   include:
-#     - src/**
-#   exclude:
-#     - "*"
-#     - "*/**"
-# functions:
-#   team2-etl:
-#     handler: src/team2-etl/handler.handle
-#     timeout: 300
-#     events:
-#       - s3:
-#           bucket: team2testbucket
-#           event: s3:ObjectCreated:*
-#           rules:
-#             - suffix: .csv
-
 
 # service: team2-etl
 # # app and org for use with dashboard.serverless.com

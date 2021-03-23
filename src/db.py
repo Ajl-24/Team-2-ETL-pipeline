@@ -1,14 +1,14 @@
 import os
 import psycopg2
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 
 def open_connection():
-    load_dotenv()
-    database = os.environ.get("postgresql_db")
-    user = os.environ.get("postgresql_user")
-    password = os.environ.get("postgresql_pass")
-    host = os.environ.get("postgresql_host")
-    port = os.environ.get("postgresql_port")
+    # load_dotenv()
+    database = 'cafe_db'
+    user = 'root'
+    password = 'password'
+    host = '172.18.0.2' #CHANGE THIS TO YOUR IP
+    port = '5432'
     
     conn = psycopg2.connect(
         database = database,
