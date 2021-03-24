@@ -65,4 +65,11 @@ class Transform:
             else:
                 self.data.append(data_copy[index])
                 
+    def reverse_date(self):
+        for order_dict in self.data:
+            old_date = order_dict['date']
+            split_date = old_date.split('/')
+            rev_date = split_date[::-1]
+            new_date = '-'.join(rev_date)
+            order_dict['date'] = new_date
     
