@@ -3,18 +3,6 @@ sys.path.append("..") # Goes back a level in the directory
 import src.app as app
 import src.transform as transform
 
-"""
-# Retired test for old requirement
-
-def test_append_data():
-    def mock_file():
-        return ["2021-02-23 09:00:48","Isle of Wight","Morgan Berka","Large,Hot chocolate,2.9,Large,Chai latte,2.6,Large,Hot chocolate,2.9","CASH","8.40","None"]
-    
-    expected = ["2021-02-23 09:00:48","Isle of Wight","Morgan Berka","Large,Hot chocolate,2.9,Large,Chai latte,2.6,Large,Hot chocolate,2.9","CASH",8.40]
-    actual = app.append_data(mock_file())
-    
-    assert actual == expected
-"""
 def test_append_to_list():
 
     def mock_reader():
@@ -27,7 +15,6 @@ def test_append_to_list():
 
     assert actual == expected
 
-test_append_to_list()
 
 def test_remove_names():
     def mock_data():
@@ -42,7 +29,6 @@ def test_remove_names():
     
     assert actual == expected
 
-test_remove_names()
 
 def test_remove_payment_details():
     def mock_data():
@@ -57,8 +43,8 @@ def test_remove_payment_details():
     
     assert actual == expected
 
-test_remove_payment_details()
-
+'''
+# Retired test from relating to old csv format
 def test_split_products():
     def mock_data():
         return [{'id': 0, 'products': 'Regular,Americano,1.95,,Flat white,2.15,,Flavoured iced latte - Caramel,2.75', 'total': '6.85'}, {'id': 1, 'products': ',Frappes - Coffee,2.75,,Speciality Tea - Darjeeling,1.3,,Smoothies - Berry Beautiful,2.0,Large,Latte,2.45', 'total': '8.50'}]
@@ -80,3 +66,35 @@ def test_split_products():
     assert actual == expected
 
 test_split_products()
+'''
+def test_split_product():
+    def mock_data():
+        return [{'id':0, 'products': 'Regular Chai latte - 2.30, Large Chai latte - 2.60, Regular Flavoured hot chocolate - Caramel - 2.60, Large Speciality Tea - Camomile - 1.60, Large Cortado - 2.35, Regular Speciality Tea - English breakfast - 1.30'}]
+    
+    mock_transform = transform.Transform(mock_data())
+    
+    mock_transform.split_products()
+    
+    actual = mock_transform.data
+    expected = [{'id': 0, 'products':'Regular Chai latte - 2.30'},
+                {'id': 0, 'products':'Large Chai latte - 2.60'},
+                {'id': 0, 'products':'Regular Flavoured hot chocolate - Caramel - 2.60'},
+                {'id': 0, 'products':'Large Speciality Tea - Camomile - 1.60'},
+                {'id': 0, 'products':'Large Cortado - 2.35'},
+                {'id': 0, 'products':'Regular Speciality Tea - English breakfast - 1.30'}
+                ]
+    
+    assert actual == expected
+
+def test_split_product_price():
+    def mock_data():
+        return [{'id': 0, 'products':'Regular Chai latte - 2.30'}]
+    
+    mock_transform = transform.Transform(mock_data())
+    
+    mock_transform.split_product_price()
+    
+    actual = mock_transform.data
+    expected = [{'id': 0, 'product':'Chai Latte Regular', 'product_price':'2.30'}]
+    
+    assert actual == expected
