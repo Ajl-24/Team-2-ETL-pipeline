@@ -31,7 +31,7 @@ ches_data = read_file(ches_file)
 
 def start_transformation(csv_data):
 
-    birm_data = transform.Transform(csv_data)
+    cafe_data = transform.Transform(csv_data)
 
     if __name__ == '__main__':
     
@@ -40,21 +40,21 @@ def start_transformation(csv_data):
         db.create_orders_table_in_cafe_db()
         db.create_products_in_orders_table_in_cafe_db()
         
-        birm_data.remove_names()
-        birm_data.remove_payment_details()
-        birm_data.split_date_time()
-        birm_data.reverse_date()
-        birm_data.add_id()
+        cafe_data.remove_names()
+        cafe_data.remove_payment_details()
+        cafe_data.split_date_time()
+        cafe_data.reverse_date()
+        cafe_data.add_id()
         
-        db.load_into_cafe_locations_table(birm_data.data)
-        db.load_into_orders_table_and_update_local_ids(birm_data.data)
+        db.load_into_cafe_locations_table(cafe_data.data)
+        db.load_into_orders_table_and_update_local_ids(cafe_data.data)
         
-        birm_data.split_products()   
-        birm_data.split_product_price()
-        birm_data.sort_by_id()
+        cafe_data.split_products()   
+        cafe_data.split_product_price()
+        cafe_data.sort_by_id()
         
-        db.load_into_products_table(birm_data.data)
-        db.load_into_products_in_orders_table(birm_data.data)
+        db.load_into_products_table(cafe_data.data)
+        db.load_into_products_in_orders_table(cafe_data.data)
         
 # start_transformation(birm_data)
 # start_transformation(ches_data)
