@@ -1,17 +1,17 @@
 import os
+import boto3
 import psycopg2
 #from dotenv import load_dotenv
 
-def open_connection():
-    # load_dotenv()
-    database = 'cafe_db'
-    user = 'root'
-    password = 'password'
-    host = '172.18.0.2' #CHANGE THIS TO YOUR IP
-    port = '5432'
+db = os.environ["db"]
+user = os.environ["user"]
+password = os.environ["pass"]
+host = os.environ["host"]
+port = os.environ["port"]
     
+def open_connection(event, c):
     conn = psycopg2.connect(
-        database = database,
+        db = db,
         user = user,
         password = password,
         host = host,

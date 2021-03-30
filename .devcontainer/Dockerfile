@@ -109,15 +109,26 @@ RUN pip3 install pytest
 
 RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
 RUN sudo apt-get install -y nodejs
+
 RUN npm install
 RUN npm install plugins serverless-python-requirements
 RUN npm install plugins serverless-iam-roles-per-function
+RUN npm install plugins serverless-dotenv-plugin
     #
     # Clean up
     #
 RUN apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
+    
+# install
+RUN sudo amazon-linux-extras install docker -y 
+# start
+RUN sudo service docker start
+# create new user group
+RUN sudo usermod -a -G docker ec2-user
+# allow docker to run on startup
+RUN sudo chkconfig docker on
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
