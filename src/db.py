@@ -1,7 +1,7 @@
 import os
 import boto3
 import psycopg2
-#from dotenv import load_dotenv
+from dotenv import load_dotenv
 
 db = os.environ["db"]
 user = os.environ["user"]
