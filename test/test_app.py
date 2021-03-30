@@ -15,7 +15,6 @@ def test_append_to_list():
 
     assert actual == expected
 
-
 def test_remove_names():
     def mock_data():
         return {'date_time': '2021-02-23 17:58:17', 'location': 'Isle of Wight', 'customer_name': 'Ramon Salters', 'products': 'Regular,Americano,1.95,,Flat white,2.15,,Flavoured iced latte - Caramel,2.75', 'payment_method': 'CASH', 'total': '6.85', 'card_details': 'None'}, {'date_time': '2021-02-23 17:59:04', 'location': 'Isle of Wight', 'customer_name': 'Stanley Cordano', 'products': ',Frappes - Coffee,2.75,,Speciality Tea - Darjeeling,1.3,,Smoothies - Berry Beautiful,2.0,Large,Latte,2.45', 'payment_method': 'CASH', 'total': '8.50', 'card_details': 'None'}
@@ -28,7 +27,6 @@ def test_remove_names():
     expected = {'date_time': '2021-02-23 17:58:17', 'location': 'Isle of Wight', 'products': 'Regular,Americano,1.95,,Flat white,2.15,,Flavoured iced latte - Caramel,2.75', 'payment_method': 'CASH', 'total': '6.85', 'card_details': 'None'}, {'date_time': '2021-02-23 17:59:04', 'location': 'Isle of Wight', 'products': ',Frappes - Coffee,2.75,,Speciality Tea - Darjeeling,1.3,,Smoothies - Berry Beautiful,2.0,Large,Latte,2.45', 'payment_method': 'CASH', 'total': '8.50', 'card_details': 'None'}
     
     assert actual == expected
-
 
 def test_remove_payment_details():
     def mock_data():
@@ -44,7 +42,7 @@ def test_remove_payment_details():
     assert actual == expected
 
 '''
-# Retired test from relating to old csv format
+# Retired test relating to old csv format
 def test_split_products():
     def mock_data():
         return [{'id': 0, 'products': 'Regular,Americano,1.95,,Flat white,2.15,,Flavoured iced latte - Caramel,2.75', 'total': '6.85'}, {'id': 1, 'products': ',Frappes - Coffee,2.75,,Speciality Tea - Darjeeling,1.3,,Smoothies - Berry Beautiful,2.0,Large,Latte,2.45', 'total': '8.50'}]
