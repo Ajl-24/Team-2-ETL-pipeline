@@ -32,29 +32,41 @@ ches_data = read_file(ches_file)
 def start_transformation(csv_data):
 
     cafe_data = transform.Transform(csv_data)
-
-    if __name__ == '__main__':
+    print('class made')
+    # if __name__ == '__main__':
     
-        db.create_products_table_in_cafe_db()
-        db.create_cafe_locations_table_in_cafe_db()
-        db.create_orders_table_in_cafe_db()
-        db.create_products_in_orders_table_in_cafe_db()
-        
-        cafe_data.remove_names()
-        cafe_data.remove_payment_details()
-        cafe_data.split_date_time()
-        cafe_data.reverse_date()
-        cafe_data.add_id()
-        
-        db.load_into_cafe_locations_table(cafe_data.data)
-        db.load_into_orders_table_and_update_local_ids(cafe_data.data)
-        
-        cafe_data.split_products()   
-        cafe_data.split_product_price()
-        cafe_data.sort_by_id()
-        
-        db.load_into_products_table(cafe_data.data)
-        db.load_into_products_in_orders_table(cafe_data.data)
+    db.create_products_table_in_cafe_db()
+    db.create_cafe_locations_table_in_cafe_db()
+    db.create_orders_table_in_cafe_db()
+    db.create_products_in_orders_table_in_cafe_db()
+    
+    cafe_data.remove_names()
+    print('transform 1')
+    cafe_data.remove_payment_details()
+    print('transform 2')
+    cafe_data.split_date_time()
+    print('transform 3')
+    cafe_data.reverse_date()
+    print('transform 4')
+    cafe_data.add_id()
+    print('transform 5')
+    
+    db.load_into_cafe_locations_table(cafe_data.data)
+    print('loading 1')
+    db.load_into_orders_table_and_update_local_ids(cafe_data.data)
+    print('loading 2')
+    
+    cafe_data.split_products()
+    print('transform 6')
+    cafe_data.split_product_price()
+    print('transform 7')
+    cafe_data.sort_by_id()
+    print('transform 8')
+    
+    db.load_into_products_table(cafe_data.data)
+    print('loading 3')
+    db.load_into_products_in_orders_table(cafe_data.data)
+    print('loading 4')
         
 # start_transformation(birm_data)
 # start_transformation(ches_data)

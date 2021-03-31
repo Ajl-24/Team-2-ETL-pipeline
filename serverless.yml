@@ -16,6 +16,7 @@
 plugins:
   - serverless-python-requirements
   - serverless-iam-roles-per-function
+  - serverless-dotenv-plugin
 
 custom:
   pythonRequirements:
@@ -25,6 +26,7 @@ custom:
 
 
 service: team2-etl
+useDotenv: true
 frameworkVersion: '2'
 provider:
   name: aws
@@ -34,6 +36,11 @@ provider:
   lambdaHashingVersion: 20201221
   iam:
     role: arn:aws:iam::505617246107:role/team-2-execution-role
+  vpc:
+    securityGroupIds:
+      - sg-08915876469706265
+    subnetIds:
+      - subnet-0abef5f20cc40db46
 package:
   individually: false
   include:
@@ -46,7 +53,7 @@ package:
 functions:
   team2-etl:
     handler: src/team2-etl/handler.handle
-    timeout: 300
+    timeout: 30
     layers:
       - !Ref PythonRequirementsLambdaLayer
     events:
@@ -58,7 +65,7 @@ functions:
 
   hello2-etl:
     handler: src/hello2-etl/hello.hello
-    timeout: 300
+    timeout: 30
 
 # service: team2-etl
 # # app and org for use with dashboard.serverless.com
