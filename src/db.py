@@ -1,17 +1,17 @@
 import os
 import boto3
 import psycopg2
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
-db = os.environ["db"]
+dbname = os.environ["dbname"]
 user = os.environ["user"]
 password = os.environ["pass"]
 host = os.environ["host"]
 port = os.environ["port"]
     
-def open_connection(event, c):
+def open_connection():
     conn = psycopg2.connect(
-        db = db,
+        dbname = dbname,
         user = user,
         password = password,
         host = host,
@@ -24,7 +24,7 @@ def create_products_table_in_cafe_db():
         connection = open_connection()
         with connection.cursor() as cursor:
             postgresql = """CREATE TABLE IF NOT EXISTS products (
-                            product_id SERIAL PRIMARY KEY NOT NULL,
+                            product_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
                             product_name VARCHAR(100) NOT NULL,
                             product_price DECIMAL(6,2) NOT NULL
                             )"""
@@ -39,7 +39,7 @@ def create_cafe_locations_table_in_cafe_db():
         connection = open_connection()
         with connection.cursor() as cursor:
             postgresql = """CREATE TABLE IF NOT EXISTS cafe_locations (
-                            location_id SERIAL PRIMARY KEY NOT NULL,
+                            location_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
                             location VARCHAR(100) NOT NULL
                             )"""
             cursor.execute(postgresql)
@@ -53,7 +53,7 @@ def create_orders_table_in_cafe_db():
         connection = open_connection()
         with connection.cursor() as cursor:
             postgresql = """CREATE TABLE IF NOT EXISTS orders (
-                            order_id SERIAL PRIMARY KEY NOT NULL,
+                            order_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
                             date DATE NOT NULL,
                             time TIME NOT NULL,
                             location_id INT NOT NULL REFERENCES cafe_locations,
@@ -134,11 +134,12 @@ def load_into_orders_table_and_update_local_ids(data_list):
                 postgresql_1 = "INSERT INTO orders (date, time, location_id, order_price) VALUES ('{}', '{}', '{}', '{}')".format(dictionary['date'], dictionary['time'], sql_location_dict[dictionary['location']], dictionary['total'])
                 cursor.execute(postgresql_1)
                 connection.commit()
-                
+                print('LOADING: ' + str(dictionary))
                 postgresql_2 = "SELECT order_id from orders WHERE order_id = (SELECT max(order_id) FROM orders)"
                 cursor.execute(postgresql_2)
                 row = cursor.fetchone()
                 dictionary['id'] = row[0]
+                print('READING: ' + str(dictionary))
         connection.close()
     except Exception as e:
         print("An error occurred when attempting to load data into the orders table: " + str(e))
