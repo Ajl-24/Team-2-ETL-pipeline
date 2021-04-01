@@ -120,15 +120,6 @@ RUN npm install plugins serverless-dotenv-plugin
 RUN apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
-    
-# # install
-# RUN sudo amazon-linux-extras install docker -y 
-# # start
-# RUN sudo service docker start
-# # create new user group
-# RUN sudo usermod -a -G docker ec2-user
-# # allow docker to run on startup
-# RUN sudo chkconfig docker on
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
