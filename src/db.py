@@ -1,6 +1,5 @@
 import os
 import psycopg2
-# from dotenv import load_dotenv
 
 dbname = os.environ["dbname"]
 user = os.environ["user"]
