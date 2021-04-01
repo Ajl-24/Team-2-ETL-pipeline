@@ -134,12 +134,11 @@ def load_into_orders_table_and_update_local_ids(data_list):
                 postgresql_1 = "INSERT INTO orders (date, time, location_id, order_price) VALUES ('{}', '{}', '{}', '{}')".format(dictionary['date'], dictionary['time'], sql_location_dict[dictionary['location']], dictionary['total'])
                 cursor.execute(postgresql_1)
                 connection.commit()
-                print('LOADING: ' + str(dictionary))
+
                 postgresql_2 = "SELECT order_id from orders WHERE order_id = (SELECT max(order_id) FROM orders)"
                 cursor.execute(postgresql_2)
                 row = cursor.fetchone()
                 dictionary['id'] = row[0]
-                print('READING: ' + str(dictionary))
         connection.close()
     except Exception as e:
         print("An error occurred when attempting to load data into the orders table: " + str(e))

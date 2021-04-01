@@ -53,7 +53,7 @@ package:
 functions:
   team2-etl:
     handler: src/team2-etl/handler.handle
-    timeout: 30
+    timeout: 300
     layers:
       - !Ref PythonRequirementsLambdaLayer
     events:
@@ -65,7 +65,7 @@ functions:
 
   hello2-etl:
     handler: src/hello2-etl/hello.hello
-    timeout: 30
+    timeout: 300
 
 # service: team2-etl
 # # app and org for use with dashboard.serverless.com

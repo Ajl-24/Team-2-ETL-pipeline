@@ -19,20 +19,16 @@ def handle(event, context):
     csv_data = csv.reader(file_data.splitlines())
     read_data = []
     data = []
-    
+
     for line in csv_data:
         read_data.append(line)
-        
+
     for line in read_data:
         order = {'date_time': line[0], 'location': line[1], 'customer_name': line[2], 'products': line[3], 'payment_method': line[5], 'total': line[4], 'card_details': line[6]}
         data.append(order)
-    
-    for i in range(10):
-        print(data[i])
 
     print("we're in")
     start_transformation(data)
     print("we're out")
 
     return {"message": "success!!! Check the cloudwatch logs for this lambda in cloudwatch https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#logsV2:log-groups"}
-
