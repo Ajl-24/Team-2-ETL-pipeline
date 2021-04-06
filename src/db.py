@@ -22,7 +22,7 @@ def create_products_table_in_cafe_db():
         connection = open_connection()
         with connection.cursor() as cursor:
             postgresql = """CREATE TABLE IF NOT EXISTS products (
-                            product_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+                            product_id INT IDENTITY PRIMARY KEY NOT NULL,
                             product_name VARCHAR(100) NOT NULL,
                             product_price DECIMAL(6,2) NOT NULL
                             )"""
@@ -37,7 +37,7 @@ def create_cafe_locations_table_in_cafe_db():
         connection = open_connection()
         with connection.cursor() as cursor:
             postgresql = """CREATE TABLE IF NOT EXISTS cafe_locations (
-                            location_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+                            location_id INT IDENTITY PRIMARY KEY NOT NULL,
                             location VARCHAR(100) NOT NULL
                             )"""
             cursor.execute(postgresql)
@@ -51,9 +51,8 @@ def create_orders_table_in_cafe_db():
         connection = open_connection()
         with connection.cursor() as cursor:
             postgresql = """CREATE TABLE IF NOT EXISTS orders (
-                            order_id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-                            date DATE NOT NULL,
-                            time TIME NOT NULL,
+                            order_id INT IDENTITY PRIMARY KEY NOT NULL,
+                            date_time TIMESTAMP NOT NULL,
                             location_id INT NOT NULL REFERENCES cafe_locations,
                             order_price DECIMAL(6,2) NOT NULL
                             )"""
@@ -129,7 +128,7 @@ def load_into_orders_table_and_update_local_ids(data_list):
         connection = open_connection()
         with connection.cursor() as cursor:
             for dictionary in data_list:
-                postgresql_1 = "INSERT INTO orders (date, time, location_id, order_price) VALUES ('{}', '{}', '{}', '{}')".format(dictionary['date'], dictionary['time'], sql_location_dict[dictionary['location']], dictionary['total'])
+                postgresql_1 = "INSERT INTO orders (date_time, location_id, order_price) VALUES ('{}', '{}', '{}')".format(dictionary['date_time'], sql_location_dict[dictionary['location']], dictionary['total'])
                 cursor.execute(postgresql_1)
                 connection.commit()
 

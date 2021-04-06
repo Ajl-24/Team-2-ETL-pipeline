@@ -23,7 +23,6 @@ class Transform:
         self.data = sorted_list
                     
     def split_date_time(self):
-        
         for order_dict in self.data:
             order_date_time = order_dict['date_time'].split(' ')
             del order_dict['date_time']
@@ -72,4 +71,9 @@ class Transform:
             rev_date = split_date[::-1]
             new_date = '-'.join(rev_date)
             order_dict['date'] = new_date
-    
+            
+    def rejoin_date_time(self):
+        for order_dict in self.data:
+            order_dict['date_time'] = ' '.join([order_dict['date'],order_dict['time']])
+            del order_dict['date']
+            del order_dict['time']

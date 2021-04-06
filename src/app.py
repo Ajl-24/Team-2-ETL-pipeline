@@ -21,6 +21,7 @@ def start_transformation(csv_data):
     cafe_data.remove_payment_details()
     cafe_data.split_date_time()
     cafe_data.reverse_date()
+    cafe_data.rejoin_date_time()
     cafe_data.add_id()
     print('Completed first set of transformation')
     
