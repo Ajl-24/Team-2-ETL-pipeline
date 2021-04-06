@@ -58,7 +58,7 @@ functions:
       - !Ref PythonRequirementsLambdaLayer
     events:
       - s3:
-          bucket: team2testbucket
+          bucket: delon2-team-2-cafe-transactions
           event: s3:ObjectCreated:*
           rules:
             - suffix: .csv
