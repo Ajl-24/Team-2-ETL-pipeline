@@ -53,8 +53,9 @@ def create_orders_table_in_cafe_db():
             postgresql = """CREATE TABLE IF NOT EXISTS orders (
                             order_id INT IDENTITY PRIMARY KEY NOT NULL,
                             date_time TIMESTAMP NOT NULL,
-                            location_id INT NOT NULL REFERENCES cafe_locations,
-                            order_price DECIMAL(6,2) NOT NULL
+                            location_id INT NOT NULL,
+                            order_price DECIMAL(6,2) NOT NULL,
+                            CONSTRAINT fk_location_id FOREIGN KEY(location_id) REFERENCES cafe_locations(location_id)
                             )"""
             cursor.execute(postgresql)
             connection.commit()
@@ -67,8 +68,10 @@ def create_products_in_orders_table_in_cafe_db():
         connection = open_connection()
         with connection.cursor() as cursor:
             postgresql = """CREATE TABLE IF NOT EXISTS products_in_orders (
-                            order_id INT NOT NULL REFERENCES orders,
-                            product_id INT NOT NULL REFERENCES products
+                            order_id INT NOT NULL,
+                            product_id INT NOT NULL,
+                            CONSTRAINT fk_order_id FOREIGN KEY(order_id) REFERENCES orders(order_id),
+                            CONSTRAINT fk_product_id FOREIGN KEY(product_id) REFERENCES products(product_id)
                             )"""
             cursor.execute(postgresql)
             connection.commit()
@@ -116,29 +119,29 @@ def load_into_cafe_locations_table(data_list):
         with connection.cursor() as cursor:
             for location in unique_location_list:
                 if location not in sql_location_dict:
-                    cursor.execute("INSERT INTO cafe_locations (location) VALUES ('{}')".format(location))
+                    cursor.execute("INSERT INTO cafe_locations (location) SELECT '{}' WHERE NOT EXISTS (SELECT location_id FROM cafe_locations WHERE location = '{}')".format(location, location))
                     connection.commit()
         connection.close()
     except Exception as e:
         print("An error occurred when attempting to load data into the cafe_locations table: " + str(e))
 
-def load_into_orders_table_and_update_local_ids(data_list):
-    sql_location_dict = fetch_location_data()
-    try:
-        connection = open_connection()
-        with connection.cursor() as cursor:
-            for dictionary in data_list:
-                postgresql_1 = "INSERT INTO orders (date_time, location_id, order_price) VALUES ('{}', '{}', '{}')".format(dictionary['date_time'], sql_location_dict[dictionary['location']], dictionary['total'])
-                cursor.execute(postgresql_1)
-                connection.commit()
+# def load_into_orders_table_and_update_local_ids(data_list):
+#     sql_location_dict = fetch_location_data()
+#     try:
+#         connection = open_connection()
+#         with connection.cursor() as cursor:
+#             for dictionary in data_list:
+#                 postgresql_1 = "INSERT INTO orders (date_time, location_id, order_price) VALUES ('{}', '{}', '{}')".format(dictionary['date_time'], sql_location_dict[dictionary['location']], dictionary['total'])
+#                 cursor.execute(postgresql_1)
+#                 connection.commit()
 
-                postgresql_2 = "SELECT order_id from orders WHERE order_id = (SELECT max(order_id) FROM orders)"
-                cursor.execute(postgresql_2)
-                row = cursor.fetchone()
-                dictionary['id'] = row[0]
-        connection.close()
-    except Exception as e:
-        print("An error occurred when attempting to load data into the orders table: " + str(e))
+#                 postgresql_2 = "SELECT order_id from orders WHERE order_id = (SELECT max(order_id) FROM orders)"
+#                 cursor.execute(postgresql_2)
+#                 row = cursor.fetchone()
+#                 dictionary['id'] = row[0]
+#         connection.close()
+#     except Exception as e:
+#         print("An error occurred when attempting to load data into the orders table: " + str(e))
 
 def load_into_products_table(data_list):
     unique_product_list = sorted(list(set((order_dict['product'], order_dict['product_price']) for order_dict in data_list)))
@@ -148,7 +151,7 @@ def load_into_products_table(data_list):
         with connection.cursor() as cursor:
             for product in unique_product_list:
                 if product[0] not in sql_product_dict:
-                    cursor.execute("INSERT INTO products (product_name, product_price) VALUES ('{}', '{}')".format(product[0], product[1]))
+                    cursor.execute("INSERT INTO products (product_name, product_price) SELECT '{}', '{}' WHERE NOT EXISTS (SELECT product_id FROM products WHERE product_name = '{}')".format(product[0], product[1], product[0]))
                     connection.commit()
         connection.close()
     except Exception as e:
@@ -166,3 +169,24 @@ def load_into_products_in_orders_table(data_list):
         connection.close()
     except Exception as e:
         print("An error occurred when attempting to load data into the products_in_orders table: " + str(e))
+
+def load_into_orders_table_and_update_local_ids(data_list):
+    sql_location_dict = fetch_location_data()
+    try:
+        connection = open_connection()
+        with connection.cursor() as cursor:
+            for dictionary in data_list:
+                #n_rows_before = pass or assessing last entry
+                postgresql_1 = "INSERT INTO orders (date_time, location_id, order_price) SELECT '{}', '{}', '{}' WHERE NOT EXISTS (SELECT order_id FROM orders WHERE date_time = '{}' AND location_id = '{}' AND order_price = '{}')".format(dictionary['date_time'], sql_location_dict[dictionary['location']], dictionary['total'], dictionary['date_time'], sql_location_dict[dictionary['location']], dictionary['total'])
+                cursor.execute(postgresql_1)
+                connection.commit()
+                #n_rows_after = pass
+                
+                
+                postgresql_2 = "SELECT order_id from orders WHERE order_id = (SELECT max(order_id) FROM orders)"
+                cursor.execute(postgresql_2)
+                row = cursor.fetchone()
+                dictionary['id'] = row[0]
+        connection.close()
+    except Exception as e:
+        print("An error occurred when attempting to load data into the orders table: " + str(e))
