@@ -62,6 +62,7 @@ functions:
           event: s3:ObjectCreated:*
           rules:
             - suffix: .csv
+    reservedConcurrency: 1
 
   hello2-etl:
     handler: src/hello2-etl/hello.hello
