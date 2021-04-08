@@ -171,22 +171,39 @@ def load_into_products_in_orders_table(data_list):
         print("An error occurred when attempting to load data into the products_in_orders table: " + str(e))
 
 def load_into_orders_table_and_update_local_ids(data_list):
+    current_table = "orders"
     sql_location_dict = fetch_location_data()
     try:
         connection = open_connection()
         with connection.cursor() as cursor:
             for dictionary in data_list:
-                #n_rows_before = pass or assessing last entry
+                rows_before = fetch_table_size(current_table)
+                
                 postgresql_1 = "INSERT INTO orders (date_time, location_id, order_price) SELECT '{}', '{}', '{}' WHERE NOT EXISTS (SELECT order_id FROM orders WHERE date_time = '{}' AND location_id = '{}' AND order_price = '{}')".format(dictionary['date_time'], sql_location_dict[dictionary['location']], dictionary['total'], dictionary['date_time'], sql_location_dict[dictionary['location']], dictionary['total'])
                 cursor.execute(postgresql_1)
                 connection.commit()
-                #n_rows_after = pass
                 
+                rows_after = fetch_table_size(current_table)
                 
-                postgresql_2 = "SELECT order_id from orders WHERE order_id = (SELECT max(order_id) FROM orders)"
-                cursor.execute(postgresql_2)
-                row = cursor.fetchone()
-                dictionary['id'] = row[0]
+                if rows_before != rows_after:                       
+                    postgresql_2 = "SELECT order_id from orders WHERE order_id = (SELECT max(order_id) FROM orders)"
+                    cursor.execute(postgresql_2)
+                    row = cursor.fetchone()
+                    dictionary['id'] = row[0]
         connection.close()
     except Exception as e:
         print("An error occurred when attempting to load data into the orders table: " + str(e))
+
+def fetch_table_size(table_name):
+    
+    try:
+        connection = open_connection()
+        with connection.cursor() as cursor:
+            postgresql = "SELECT COUNT(*) FROM {}".format(table_name)
+            cursor.execute(postgresql)
+            table_size = cursor.fetchone()
+            cursor.close()
+    except Exception as e:
+        print("An error occurred when attempting to fetch size data from the {} table: ".format(table_name) + str(e))
+    
+    return table_size
