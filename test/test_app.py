@@ -41,30 +41,6 @@ def test_remove_payment_details():
     
     assert actual == expected
 
-'''
-# Retired test relating to old csv format
-def test_split_products():
-    def mock_data():
-        return [{'id': 0, 'products': 'Regular,Americano,1.95,,Flat white,2.15,,Flavoured iced latte - Caramel,2.75', 'total': '6.85'}, {'id': 1, 'products': ',Frappes - Coffee,2.75,,Speciality Tea - Darjeeling,1.3,,Smoothies - Berry Beautiful,2.0,Large,Latte,2.45', 'total': '8.50'}]
-
-    mock_transform = transform.Transform(mock_data())
-    
-    mock_transform.split_products()
-    
-    actual = mock_transform.data
-    expected = [{'id': 0, 'products': 'Regular,Americano,1.95', 'total': '6.85'},
-                {'id': 0, 'products': ',Flat white,2.15', 'total': '6.85'},
-                {'id': 0, 'products': ',Flavoured iced latte - Caramel,2.75', 'total': '6.85'},
-                {'id': 1, 'products': ',Frappes - Coffee,2.75', 'total': '8.50'},
-                {'id': 1, 'products': ',Speciality Tea - Darjeeling,1.3', 'total': '8.50'},
-                {'id': 1, 'products': ',Smoothies - Berry Beautiful,2.0', 'total': '8.50'},
-                {'id': 1, 'products': 'Large,Latte,2.45', 'total': '8.50'}
-                ]
-    
-    assert actual == expected
-
-test_split_products()
-'''
 def test_split_product():
     def mock_data():
         return [{'id':0, 'products': 'Regular Chai latte - 2.30, Large Chai latte - 2.60, Regular Flavoured hot chocolate - Caramel - 2.60, Large Speciality Tea - Camomile - 1.60, Large Cortado - 2.35, Regular Speciality Tea - English breakfast - 1.30'}]
@@ -96,3 +72,50 @@ def test_split_product_price():
     expected = [{'id': 0, 'product':'Chai Latte Regular', 'product_price':'2.30'}]
     
     assert actual == expected
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+'''
+# Retired test relating to old csv format
+def test_split_products():
+    def mock_data():
+        return [{'id': 0, 'products': 'Regular,Americano,1.95,,Flat white,2.15,,Flavoured iced latte - Caramel,2.75', 'total': '6.85'}, {'id': 1, 'products': ',Frappes - Coffee,2.75,,Speciality Tea - Darjeeling,1.3,,Smoothies - Berry Beautiful,2.0,Large,Latte,2.45', 'total': '8.50'}]
+
+    mock_transform = transform.Transform(mock_data())
+    
+    mock_transform.split_products()
+    
+    actual = mock_transform.data
+    expected = [{'id': 0, 'products': 'Regular,Americano,1.95', 'total': '6.85'},
+                {'id': 0, 'products': ',Flat white,2.15', 'total': '6.85'},
+                {'id': 0, 'products': ',Flavoured iced latte - Caramel,2.75', 'total': '6.85'},
+                {'id': 1, 'products': ',Frappes - Coffee,2.75', 'total': '8.50'},
+                {'id': 1, 'products': ',Speciality Tea - Darjeeling,1.3', 'total': '8.50'},
+                {'id': 1, 'products': ',Smoothies - Berry Beautiful,2.0', 'total': '8.50'},
+                {'id': 1, 'products': 'Large,Latte,2.45', 'total': '8.50'}
+                ]
+    
+    assert actual == expected
+
+test_split_products()
+'''
