@@ -10,7 +10,7 @@ In line with agile methodology, each member has agreed to commit to the followin
 1. Managing time to increase quality of work by including regular breaks to avoid burnout
 2. Communicating regularly, respectfully and effectively
 3. Maintain impartiality and objectivity with team members
-4. Persistance and dedication regarding task completion
+4. Persistence and dedication regarding task completion
 5. Conflicts will be resolved with respect, understanding and group agreement
 6. Utilising a growth mindset when facing challenges 
 
